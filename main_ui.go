@@ -40,6 +40,9 @@ func DisplayMainUI(app *cview.Application) {
 	// Form element to enter hunter callsign
 	WorkedCallsignInput.SetLabel("Their Call")
 	WorkedCallsignInput.SetFieldWidth(10)
+	WorkedCallsignInput.SetDoneFunc(func(key tcell.Key) {
+		convert_input_to_upper(WorkedCallsignInput)
+	})
 
 	// Define sent report input field
 	SentReportInput.SetLabel("RST Sent")
@@ -52,6 +55,9 @@ func DisplayMainUI(app *cview.Application) {
 	// Define activator frequency input field
 	WorkedParkInput.SetLabel("Their Park")
 	WorkedParkInput.SetFieldWidth(8)
+	WorkedParkInput.SetDoneFunc(func(key tcell.Key) {
+		convert_input_to_upper(WorkedParkInput)
+	})
 
 	// Define comments input field
 	CommentsInput.SetLabel("Comments")
@@ -80,7 +86,7 @@ func DisplayMainUI(app *cview.Application) {
 	TitleBar.SetBorder(false)
 	TitleBar.SetBackgroundColor(tcell.ColorBlue.TrueColor())
 	TitleBar.SetTextColor(tcell.ColorWhite.TrueColor())
-	TitleBar.SetText("mLog v0.1.0 by NQ0M")
+	TitleBar.SetText(TitleText)
 	TitleBar.SetTextAlign(cview.AlignCenter)
 
 	// Setup the activator bar
