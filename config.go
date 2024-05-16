@@ -11,3 +11,6 @@ type Operator struct {
 	LogStatement *sql.Stmt
 	NumContacts  int
 }
+
+const Version string = "0.1.0"
+const TitleText string = "LetsGoPota v" + Version + "by NQ0M"
