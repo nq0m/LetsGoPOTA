@@ -138,9 +138,11 @@ tx_pwr
 	RcvdReportInput.SetText("")
 	WorkedParkInput.SetText("")
 	CommentsInput.SetText("")
+	// Increment the number of contacts
+	Op.NumContacts = Op.NumContacts + 1
 	// and update the title bar with the number of contacts
-	if Op.NumContacts > 10 {
-		// Less than 10 contacts, successful activation, make the number green
+	if Op.NumContacts >= 10 {
+		// 10 or more contacts, successful activation, make the number green
 		ActivatorBar.SetText(Op.MyCallsign + "@" + Op.MyPark + " Contacts [green]" + strconv.Itoa(Op.NumContacts) + "[white]")
 	} else {
 		// Less than 10 contacts, keep the number in red text
