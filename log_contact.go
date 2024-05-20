@@ -75,6 +75,16 @@ func LogContact(app *cview.Application) {
 	mode := selectedOption.GetText()
 	// Also we need to get our band based on our frequency
 	band := get_band_from_freq(FreqInput.GetText())
+	// Before we insert our contact into the database, we need to make sure we have all required fields
+	if WorkedCallsignInput.GetText() == "" {
+		return
+	}
+	if FreqInput.GetText() == "" {
+		return
+	}
+	if mode == "" {
+		return
+	}
 	// Compose our query
 	dbQuery := fmt.Sprintf(
 		`INSERT INTO log (
