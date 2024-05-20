@@ -54,7 +54,7 @@ func DisplayMainUI(app *cview.Application) {
 
 	// Define activator frequency input field
 	WorkedParkInput.SetLabel("Their Park")
-	WorkedParkInput.SetFieldWidth(8)
+	WorkedParkInput.SetFieldWidth(9)
 	WorkedParkInput.SetDoneFunc(func(key tcell.Key) {
 		convert_input_to_upper(WorkedParkInput)
 	})
@@ -106,7 +106,10 @@ func DisplayMainUI(app *cview.Application) {
 	ContactInputForm.AddFormItem(ModeDropDown)
 	ContactInputForm.AddFormItem(MyPowerInput)
 	ContactInputForm.AddButton("Log", func() {
-		LogContact()
+		LogContact(app)
+	})
+	ContactInputForm.AddButton("Export ADIF", func() {
+		ExportADIF()
 	})
 	ContactInputForm.SetHorizontal(true)
 	ContactInputForm.SetBorder(false)
@@ -122,6 +125,7 @@ func DisplayMainUI(app *cview.Application) {
 	StatusBox.SetBorder(true)
 	StatusBox.SetTitle("Status")
 	StatusBox.SetTitleAlign(cview.AlignCenter)
+	StatusBox.SetText("Logging to database file: " + Op.DatabaseFile)
 
 	MainUI.SetDirection(cview.FlexRow)
 	MainUI.AddItem(TitleBar, 1, 1, false)

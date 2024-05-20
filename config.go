@@ -8,6 +8,7 @@ type Operator struct {
 	MyState      string
 	MyPark       string
 	Database     *sql.DB
+	DatabaseFile string
 	LogStatement *sql.Stmt
 	NumContacts  int
 }

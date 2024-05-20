@@ -7,10 +7,11 @@ import (
 	"strconv"
 	"time"
 
+	"code.rocketnine.space/tslocum/cview"
 	_ "modernc.org/sqlite"
 )
 
-func CreateLogFile() {
+func GetApplicationDirectory() string {
 	//Get the current user's home directory
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -24,19 +25,23 @@ func CreateLogFile() {
 		if err != nil {
 			panic(err)
 		}
-	}
-	// Check if our ~/.config/mlog directory exists
-	if _, err := os.Stat(dotconigdir + "/mlog"); os.IsNotExist(err) {
+	} // Check if our ~/.config/lgp directory exists
+	if _, err := os.Stat(dotconigdir + "/lgp"); os.IsNotExist(err) {
 		// If it doesn't exist, create it
-		err := os.Mkdir(dotconigdir+"/mlog", 0755)
+		err := os.Mkdir(dotconigdir+"/lgp", 0755)
 		if err != nil {
 			panic(err)
 		}
 	}
+	return dotconigdir + "/lgp/"
+}
+
+func CreateLogFile() {
+	var err error
 	// Define our database file path
-	dbFile := dotconigdir + "/mlog/" + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".db"
+	Op.DatabaseFile = GetApplicationDirectory() + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".db"
 	// Open our new database file
-	Op.Database, err = sql.Open("sqlite", dbFile)
+	Op.Database, err = sql.Open("sqlite", Op.DatabaseFile)
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +69,7 @@ tx_pwr TEXT
 	}
 }
 
-func LogContact() {
+func LogContact(app *cview.Application) {
 	// First, we need to get our mode from the dropdown options
 	_, selectedOption := ModeDropDown.GetCurrentOption()
 	mode := selectedOption.GetText()
@@ -149,7 +154,7 @@ tx_pwr
 		ActivatorBar.SetText(Op.MyCallsign + "@" + Op.MyPark + " Contacts [red]" + strconv.Itoa(Op.NumContacts) + "[white]")
 	}
 	// and set focus back to the callsign field
-	ContactInputForm.SetFocus(0)
+	app.SetFocus(WorkedCallsignInput)
 }
 
 func get_band_from_freq(freq string) string {
