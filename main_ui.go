@@ -28,7 +28,7 @@ var ActivatorBar *cview.TextView = cview.NewTextView()
 var ContactInputForm *cview.Form = cview.NewForm()
 
 // Area to show logged contacts
-var LogBox *cview.Box = cview.NewBox()
+var LogTable *cview.Table = cview.NewTable()
 
 // Status area
 var StatusBox *cview.TextView = cview.NewTextView()
@@ -107,6 +107,7 @@ func DisplayMainUI(app *cview.Application) {
 	ContactInputForm.AddFormItem(MyPowerInput)
 	ContactInputForm.AddButton("Log", func() {
 		LogContact(app)
+		DisplayLogUIContacts(app)
 	})
 	ContactInputForm.AddButton("Export ADIF", func() {
 		ExportADIF()
@@ -116,10 +117,7 @@ func DisplayMainUI(app *cview.Application) {
 	ContactInputForm.SetPadding(0, 0, 1, 1)
 	ContactInputForm.SetFocus(0)
 
-	// Create the logging box
-	LogBox.SetBorder(true)
-	LogBox.SetTitle("Log")
-	LogBox.SetTitleAlign(cview.AlignCenter)
+	DisplayLogUIHeadings(app)
 
 	// Create the status box
 	StatusBox.SetBorder(true)
@@ -131,7 +129,7 @@ func DisplayMainUI(app *cview.Application) {
 	MainUI.AddItem(TitleBar, 1, 1, false)
 	MainUI.AddItem(ActivatorBar, 2, 1, false)
 	MainUI.AddItem(ContactInputForm, 2, 1, true)
-	MainUI.AddItem(LogBox, 0, 1, false)
+	MainUI.AddItem(LogTable, 0, 1, false)
 	MainUI.AddItem(StatusBox, 5, 1, false)
 
 	app.SetRoot(MainUI, true)
