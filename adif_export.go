@@ -12,7 +12,7 @@ import (
 
 func ExportADIF() {
 	// Setup our file path & name
-	adifFilename := GetApplicationDirectory() + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".adif"
+	adifFilename := GetDocumentsDirectory() + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".adif"
 	// Output info to status box
 	StatusBox.SetText("Writing ADIF file to: " + adifFilename)
 	// Create our file

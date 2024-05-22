@@ -118,12 +118,15 @@ func DisplayMainUI(app *cview.Application) {
 	ContactInputForm.SetFocus(0)
 
 	DisplayLogUIHeadings(app)
+	// If we have existing contacts, we need to display them
+	if Op.NumContacts > 0 {
+		DisplayLogUIContacts(app)
+	}
 
 	// Create the status box
 	StatusBox.SetBorder(true)
 	StatusBox.SetTitle("Status")
 	StatusBox.SetTitleAlign(cview.AlignCenter)
-	StatusBox.SetText("Logging to database file: " + Op.DatabaseFile)
 
 	MainUI.SetDirection(cview.FlexRow)
 	MainUI.AddItem(TitleBar, 1, 1, false)

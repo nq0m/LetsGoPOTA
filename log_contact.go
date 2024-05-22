@@ -11,41 +11,41 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func GetApplicationDirectory() string {
+func GetDocumentsDirectory() string {
 	//Get the current user's home directory
 	home, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
-	dotconigdir := home + "/.config"
-	// Check if our ~/.config directory exists
-	if _, err := os.Stat(dotconigdir); os.IsNotExist(err) {
+	docdir := home + "/Documents"
+	// Check if our ~/Documents directory exists
+	if _, err := os.Stat(docdir); os.IsNotExist(err) {
 		// If it doesn't exist, create it
-		err := os.Mkdir(dotconigdir, 0755)
-		if err != nil {
-			panic(err)
-		}
-	} // Check if our ~/.config/lgp directory exists
-	if _, err := os.Stat(dotconigdir + "/lgp"); os.IsNotExist(err) {
-		// If it doesn't exist, create it
-		err := os.Mkdir(dotconigdir+"/lgp", 0755)
+		err := os.Mkdir(docdir, 0755)
 		if err != nil {
 			panic(err)
 		}
 	}
-	return dotconigdir + "/lgp/"
+	return docdir
 }
 
 func CreateLogFile() {
 	var err error
 	// Define our database file path
-	Op.DatabaseFile = GetApplicationDirectory() + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".db"
+	Op.DatabaseFile = GetDocumentsDirectory() + "/" + Op.MyCallsign + "@" + Op.MyPark + "-" + time.Now().UTC().Format("20060102") + ".db"
+	// Does our database file exist?
+	newdb := false
+	if _, err := os.Stat(Op.DatabaseFile); os.IsNotExist(err) {
+		newdb = true
+	}
 	// Open our new database file
 	Op.Database, err = sql.Open("sqlite", Op.DatabaseFile)
 	if err != nil {
 		panic(err)
 	}
-	if _, err = Op.Database.Exec(`
+	// If the file did not exist previously, we need to create the table
+	if newdb {
+		if _, err = Op.Database.Exec(`
 CREATE TABLE IF NOT EXISTS log (
 call TEXT NOT NULL,
 band TEXT NOT NULL,
@@ -59,13 +59,26 @@ sig_info TEXT,
 comment TEXT,
 tx_pwr TEXT
 );
-	`); err != nil {
-		panic(err)
+		`); err != nil {
+			panic(err)
+		}
+		// Display our status message
+		StatusBox.SetText("Created new database: " + Op.DatabaseFile)
 	}
 	// Prepared statement to insert a contact into the database
 	Op.LogStatement, err = Op.Database.Prepare("INSERT INTO log (call, band, mode, qso_date, time_on, freq, rst_sent, rst_rcvd, sig_info, comment, tx_pwr) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		panic(err)
+	}
+	// If we're using an existing database, we need to get a count of the number of entries
+	var count int
+	err = Op.Database.QueryRow("SELECT COUNT(*) FROM log").Scan(&count)
+	switch {
+	case err != nil:
+		panic(err)
+	default:
+		StatusBox.SetText("Using existing database: " + Op.DatabaseFile)
+		Op.NumContacts = count
 	}
 }
 
