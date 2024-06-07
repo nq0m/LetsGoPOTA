@@ -11,7 +11,11 @@ type Operator struct {
 	DatabaseFile string
 	LogStatement *sql.Stmt
 	NumContacts  int
+	FlrigAddress string
+	QrzEnabled   bool
+	QrzUsername  string
+	QrzPassword  string
 }
 
 const Version string = "0.1.0"
-const TitleText string = "LetsGoPota v" + Version + "by NQ0M"
+const Title string = "LetsGoPota v" + Version + "by NQ0M"

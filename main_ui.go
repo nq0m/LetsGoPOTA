@@ -42,6 +42,7 @@ func DisplayMainUI(app *cview.Application) {
 	WorkedCallsignInput.SetFieldWidth(10)
 	WorkedCallsignInput.SetDoneFunc(func(key tcell.Key) {
 		convert_input_to_upper(WorkedCallsignInput)
+		go QrzLookup(app)
 	})
 
 	// Define sent report input field
@@ -81,9 +82,19 @@ func DisplayMainUI(app *cview.Application) {
 	MyPowerInput.SetLabel("Power Out")
 	MyPowerInput.SetFieldWidth(4)
 
+	// Create our full TitleText, including status indicators
+	TitleText := Title
+	if Op.FlrigAddress != "" {
+		TitleText = TitleText + " [green]FLRig[white] "
+	}
+	if Op.QrzEnabled {
+		TitleText = TitleText + " [green]QRZ[white] "
+	}
+
 	// Setup the title bar
 	TitleBar.SetPadding(0, 0, 0, 0)
 	TitleBar.SetBorder(false)
+	TitleBar.SetDynamicColors(true)
 	TitleBar.SetBackgroundColor(tcell.ColorBlue.TrueColor())
 	TitleBar.SetTextColor(tcell.ColorWhite.TrueColor())
 	TitleBar.SetText(TitleText)
@@ -136,4 +147,7 @@ func DisplayMainUI(app *cview.Application) {
 	MainUI.AddItem(StatusBox, 5, 1, false)
 
 	app.SetRoot(MainUI, true)
+	if Op.FlrigAddress != "" {
+		go GetFlrig(app)
+	}
 }

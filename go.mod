@@ -5,11 +5,13 @@ go 1.22.3
 require (
 	code.rocketnine.space/tslocum/cview v1.5.9
 	github.com/gdamore/tcell/v2 v2.7.4
+	github.com/k0swe/qrz-api v0.2.39
 	modernc.org/sqlite v1.29.9
 )
 
 require (
 	code.rocketnine.space/tslocum/cbind v0.1.5 // indirect
+	github.com/antihax/optional v1.0.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -20,6 +22,7 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.4.6 // indirect
+	golang.org/x/oauth2 v0.20.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/term v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect

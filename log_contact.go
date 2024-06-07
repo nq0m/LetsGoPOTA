@@ -63,7 +63,8 @@ tx_pwr TEXT
 			panic(err)
 		}
 		// Display our status message
-		StatusBox.SetText("Created new database: " + Op.DatabaseFile)
+		statusText := fmt.Sprintf("Created new database: %s\n", Op.DatabaseFile)
+		StatusBox.SetText(statusText)
 	}
 	// Prepared statement to insert a contact into the database
 	Op.LogStatement, err = Op.Database.Prepare("INSERT INTO log (call, band, mode, qso_date, time_on, freq, rst_sent, rst_rcvd, sig_info, comment, tx_pwr) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -77,7 +78,8 @@ tx_pwr TEXT
 	case err != nil:
 		panic(err)
 	default:
-		StatusBox.SetText("Using existing database: " + Op.DatabaseFile)
+		statusText := fmt.Sprintf("Using existing database: %s\n", Op.DatabaseFile)
+		StatusBox.SetText(statusText)
 		Op.NumContacts = count
 	}
 }
